@@ -1,0 +1,76 @@
+#include <iostream>
+using namespace std;
+
+struct Node {
+    int comp;
+    Node* prev;
+    Node* next;
+    Node(int c) : comp(c), prev(NULL), next(NULL) {}
+};
+
+class Train {
+    Node* head;
+    Node* tail; // new tail pointer
+public:
+    Train() {
+        head = NULL;
+        tail = NULL;
+    }
+
+    void insertEnd(int comp) {
+        Node* n = new Node(comp);
+        if (!head) {
+            head = tail = n; // first node
+        } else {
+            tail->next = n;
+            n->prev = tail;
+            tail = n;
+        }
+    }
+
+    void deleteFront() {
+        if (!head) return;
+        Node* temp = head;
+        head = head->next;
+        if (head) {
+            head->prev = NULL;
+        } else {
+            tail = NULL; // list became empty
+        }
+        delete temp;
+    }
+
+    void search(int comp) {
+        Node* temp = head;
+        while (temp) {
+            if (temp->comp == comp) {
+                cout << "Compartment " << comp << " found.\n";
+                return;
+            }
+            temp = temp->next;
+        }
+        cout << "Compartment " << comp << " not found.\n";
+    }
+
+    void display() {
+        Node* temp = head;
+        while (temp) {
+            cout << temp->comp << " <-> ";
+            temp = temp->next;
+        }
+        cout << "NULL\n";
+    }
+};
+
+int main() {
+    Train t;
+    t.insertEnd(101);
+    t.insertEnd(102);
+    t.insertEnd(103);
+    t.display();
+
+    t.deleteFront();
+    t.display();
+
+    t.search(103);
+}
