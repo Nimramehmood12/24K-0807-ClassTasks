@@ -1,0 +1,86 @@
+#include<iostream>
+using namespace std;
+
+class Node{
+    public:
+    string book;
+    Node *next;
+    Node(string b):book(b),next(NULL){}
+};
+
+class Catalog{
+public:
+    Node *head;
+    Node *tail;
+    Catalog(){
+        head=NULL;
+        tail=NULL;
+    }
+
+    void insertAtTail(string book)
+    {
+        Node *n = new Node(book);
+        if (head == NULL)
+        {
+            head = n;
+            tail = n;
+            return;
+        }
+        tail->next = n;
+        tail = n;
+        cout << "Added" << endl;
+    }
+
+    void deleteFront(){
+        if(!head) return;
+        Node *temp=head;
+        head=head->next;
+        delete temp;
+    }
+
+    void searchTitle(string title){
+        Node* temp = head;
+        while (temp) {
+            if (temp->book == title) {
+                cout << "Book Found: " << temp->book << endl;
+                return;
+            }
+            temp = temp->next;
+        }
+        cout << "Book not found.\n";
+    }
+
+    void searchPosition(int pos){
+        Node *temp=head;
+        int ind=1;
+        while(temp && ind<pos){
+            temp=temp->next;
+            ind++;
+        }
+        if(temp) cout<<"Book at position " << pos << " = " << temp->book << endl;
+        else cout << "Invalid position.\n";
+    }
+
+    void display(){
+        Node* temp=head;
+        while(temp){
+            cout<<temp->book<<"->";
+            temp=temp->next;
+        }
+        cout<<"\n";
+    }
+};
+
+int main(){
+    Catalog cat;
+    cat.insertAtTail("OS");
+    cat.insertAtTail("DBMS");
+    cat.insertAtTail("AI");
+    cat.display();
+
+    cat.deleteFront();
+    cat.display();
+
+    cat.searchTitle("DBMS");
+    cat.searchPosition(2);
+}
