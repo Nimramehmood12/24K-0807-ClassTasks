@@ -1,0 +1,77 @@
+#include <iostream>
+using namespace std;
+
+class Song {
+public:
+    string title;
+    string artist;
+    Song* next;
+
+    Song(string t, string a) {
+        title = t;
+        artist = a;
+        next = nullptr;
+    }
+};
+
+class Playlist {
+private:
+    Song* tail;
+
+public:
+    Playlist() { tail = nullptr; }
+
+    void addSong(string title, string artist) {
+        Song* s = new Song(title, artist);
+        if (!tail) {
+            tail = s;
+            tail->next = tail;
+        } else {
+            s->next = tail->next;
+            tail->next = s;
+            tail = s;
+        }
+        cout << "Added: " << title << " by " << artist << endl;
+    }
+
+    void display() {
+        if (!tail) {
+            cout << "Playlist is empty." << endl;
+            return;
+        }
+        Song* current = tail->next;
+        do {
+            cout << current->title << " by " << current->artist << " -> ";
+            current = current->next;
+        } while (current != tail->next);
+        cout << "(back to start)" << endl;
+    }
+
+    void play(int n = 1) {
+        if (!tail) {
+            cout << "Playlist is empty." << endl;
+            return;
+        }
+        Song* current = tail->next;
+        for (int i = 0; i < n; i++) {
+            cout << "Playing: " << current->title << " by " << current->artist << endl;
+            current = current->next;
+        }
+    }
+};
+
+int main() {
+    Playlist pl;
+    pl.addSong("Shape of You", "Ed Sheeran");
+    pl.addSong("Blinding Lights", "The Weeknd");
+    pl.addSong("Levitating", "Dua Lipa");
+    pl.addSong("Bad Habits", "Ed Sheeran");
+
+    cout << "\nPlaylist:" << endl;
+    pl.display();
+
+    cout << "\nPlaying next 6 songs:" << endl;
+    pl.play(6);
+
+    return 0;
+}
