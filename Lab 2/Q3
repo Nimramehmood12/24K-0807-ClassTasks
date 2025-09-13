@@ -14,7 +14,7 @@ public:
             rowSizes[i] = sizes[i];
             data[i] = new int[rowSizes[i]];
             for (int j = 0; j < rowSizes[i]; ++j)
-                data[i][j] = 0; 
+                data[i][j] = 0;
         }
     }
 
@@ -27,16 +27,16 @@ public:
 
     void print() const {
         for (int i = 0; i < numRows; ++i) {
-            cout << "Row #" << i << ": ";
+            cout << "Team " << i << ": ";
             for (int j = 0; j < rowSizes[i]; ++j) {
                 cout << data[i][j] << " ";
             }
             cout << endl;
         }
-        cout<<endl;
+        cout << endl;
     }
 
-    int sum(int row) {
+    int sum(int row) const {
         int total = 0;
         for (int j = 0; j < rowSizes[row]; ++j)
             total += data[row][j];
@@ -46,22 +46,32 @@ public:
     void store(int r, int c, int value) {
         if (r >= 0 && r < numRows && c >= 0 && c < rowSizes[r]) {
             data[r][c] = value;
+        } else {
+            cout << "Invalid index (" << r << ", " << c << ")" << endl;
         }
     }
 };
 
 int main() {
-    int* arr = new int[3]{3, 1, 4};
-    jaggedArray jagged(3, arr);
-    jagged.print();
-    cout<<endl;
-    jagged.store(0, 0, 5);
-    jagged.store(0, 1, 10);
-    jagged.store(1, 2, 15);
-    jagged.store(2, 0, 20);
-    jagged.print();
-    int n = sizeof(arr)/sizeof(arr[0]);
-    for(int i=0;i<=n;i++)
-        cout<<"Sum of row "<<i<<" is "<<jagged.sum(i)<<endl;
-    delete[] arr;
+    int sizes[3] = {3, 1, 4};
+    jaggedArray teams(3, sizes);
+
+    teams.store(0, 0, 5);
+    teams.store(0, 1, 10);
+    teams.store(0, 2, 8);
+
+    teams.store(1, 0, 15);
+
+    teams.store(2, 0, 20);
+    teams.store(2, 1, 12);
+    teams.store(2, 2, 18);
+    teams.store(2, 3, 25);
+
+    teams.print();
+
+    for (int i = 0; i < 3; i++) {
+        cout << "Total score of team " << i << " = " << teams.sum(i) << endl;
+    }
+
+    return 0;
 }
