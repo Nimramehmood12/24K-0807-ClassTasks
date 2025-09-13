@@ -1,0 +1,114 @@
+#include <iostream>
+using namespace std;
+
+struct Node {
+    int data;
+    Node* next;
+    Node(int d) : data(d), next(NULL) {}
+};
+
+class LinkedList {
+public:
+    Node* head;
+    LinkedList() { head = NULL; }
+
+    void insertEnd(int val) {
+        Node* n = new Node(val);
+        if (!head) { head = n; return; }
+        Node* temp = head;
+        while (temp->next) temp = temp->next;
+        temp->next = n;
+    }
+
+    void display() {
+        Node* temp = head;
+        while (temp) {
+            cout << temp->data << " -> ";
+            temp = temp->next;
+        }
+        cout << "NULL\n";
+    }
+
+    void sortList() {
+        for (Node* i = head; i && i->next; i = i->next) {
+            for (Node* j = i->next; j; j = j->next) {
+                if (i->data > j->data) swap(i->data, j->data);
+            }
+        }
+    }
+
+    void concatenate(LinkedList &other) {
+        if (!head) { head = other.head; return; }
+        Node* temp = head;
+        while (temp->next) temp = temp->next;
+        temp->next = other.head;
+    }
+
+    void findMiddle() {
+        Node* slow = head;
+        Node* fast = head;
+        while (fast && fast->next) {
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+        if (slow) cout << "Middle element = " << slow->data << endl;
+    }
+
+    void removeDuplicates() {
+        for (Node* i = head; i; i = i->next) {
+            Node* prev = i;
+            Node* j = i->next;
+            while (j) {
+                if (j->data == i->data) {
+                    prev->next = j->next;
+                    delete j;
+                    j = prev->next;
+                } else {
+                    prev = j;
+                    j = j->next;
+                }
+            }
+        }
+    }
+
+    LinkedList mergeSorted(LinkedList &other) {
+        Node dummy(0);
+        Node* tail = &dummy;
+        Node* p = head;
+        Node* q = other.head;
+        while (p && q) {
+            if (p->data < q->data) { tail->next = p; p = p->next; }
+            else { tail->next = q; q = q->next; }
+            tail = tail->next;
+        }
+        tail->next = (p ? p : q);
+        LinkedList res;
+        res.head = dummy.next;
+        return res;
+    }
+};
+
+int main() {
+    LinkedList l1, l2;
+    l1.insertEnd(3); l1.insertEnd(1); l1.insertEnd(2);
+    l2.insertEnd(4); l2.insertEnd(6); l2.insertEnd(5);
+
+    cout << "List1: "; l1.display();
+    cout << "List2: "; l2.display();
+
+    l1.sortList();
+    cout << "Sorted List1: "; l1.display();
+
+    l1.concatenate(l2);
+    cout << "Concatenated: "; l1.display();
+
+    l1.findMiddle();
+
+    l1.removeDuplicates();
+    cout << "After removing duplicates: "; l1.display();
+
+    l1.sortList(); // ensure sorted before merging
+    l2.sortList();
+    LinkedList merged = l1.mergeSorted(l2);
+    cout << "Merged Sorted: "; merged.display();
+}
