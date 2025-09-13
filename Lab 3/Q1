@@ -1,0 +1,103 @@
+#include <iostream>
+using namespace std;
+
+class Node
+{
+public:
+    string data;
+    Node *next;
+
+    Node(string v)
+    {
+        data = v;
+        next = NULL;
+    }
+};
+
+class BookList
+{
+public:
+    Node *head;
+    Node *tail;
+    BookList()
+    {
+        head = NULL;
+        tail = NULL;
+    }
+
+    void insertAtStart(string book)
+    {
+        Node *n = new Node(book);
+        n->next = head;
+        head = n;
+    }
+
+    void insertAtTail(string book)
+    {
+        Node *n = new Node(book);
+        if (head == NULL)
+        {
+            head = n;
+            tail = n;
+            return;
+        }
+        tail->next = n;
+        tail = n;
+        cout << "Added" << endl;
+    }
+
+    void insertAfter(string target, string v)
+    {
+        Node *temp = head;
+        while (temp && temp->data != target)
+        {
+            temp = temp->next;
+        }
+        if (temp)
+        {
+            Node *n = new Node(v);
+            n->next = temp->next;
+            temp->next = n;
+        }
+    }
+
+    bool search(string book)
+    {
+        Node *temp = head;
+        while (temp)
+        {
+            if (temp->data == book)
+                return true;
+            temp = temp->next;
+        }
+        return false;
+    }
+
+    void display()
+    {
+        Node *temp = head;
+        while (temp)
+        {
+            cout << temp->data << " -> ";
+            temp = temp->next;
+        }
+        cout<<endl;
+    }
+};
+
+int main()
+{
+    BookList list;
+    list.insertAtTail("Data Structures");
+    list.insertAtTail("Operating Systems");
+    list.insertAtTail("Computer Networks");
+    list.insertAtTail("Database Systems");
+
+    list.insertAtStart("Artificial Intelligence");
+    list.insertAtTail("Machine Learning");
+    list.insertAfter("Operating Systems", "Cyber Security");
+
+    list.display();
+
+    cout << (list.search("Database Systems") ? "Found" : "Not Found") << endl;
+}
