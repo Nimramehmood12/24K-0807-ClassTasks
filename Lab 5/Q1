@@ -1,0 +1,33 @@
+#include<iostream>
+#include<cstdlib>
+#include<ctime>
+using namespace std;
+
+void playGame(int t,int p,int total){
+    int g;
+    cout << "Player " << p << ", enter your guess (1-100): ";
+    cin >> g;
+
+    if(g==t){
+        cout<<"Conratulations "<<p<<" guessed the correct no."<<endl;
+    }else if(g>t){
+        cout<<"Too high guess again\n";
+    }else{
+        cout<<"Too low guess again\n";
+    }
+    int next=(p%total)+1;
+
+    playGame(t,next,total);
+}
+
+int main(){
+    srand(time(0));
+    int random=rand()%100+1;
+
+    int t;
+    cout<<"Enter number of players: ";
+    cin>>t;
+
+    cout<<"Guess the number between 1 and 100";
+    playGame(random,1,t);
+}
