@@ -1,0 +1,61 @@
+#include <iostream>
+using namespace std;
+
+class Product {
+public:
+    string name, description;
+    float price;
+    bool available;
+};
+
+void swap(Product &a, Product &b) {
+    Product temp = a;
+    a = b;
+    b = temp;
+}
+
+int partition(Product arr[], int low, int high) {
+    float pivot = arr[high].price;
+    int i = low - 1;
+    for (int j = low; j < high; j++) {
+        if (arr[j].price < pivot) {
+            i++;
+            swap(arr[i], arr[j]);
+        }
+    }
+    swap(arr[i + 1], arr[high]);
+    return i + 1;
+}
+
+void quickSort(Product arr[], int low, int high) {
+    if (low < high) {
+        int pi = partition(arr, low, high);
+        quickSort(arr, low, pi - 1);
+        quickSort(arr, pi + 1, high);
+    }
+}
+
+int main() {
+    Product p[3];
+    for (int i = 0; i < 3; i++) {
+        cout << "Enter product " << i + 1 << " name: ";
+        cin >> p[i].name;
+        cout << "Price: ";
+        cin >> p[i].price;
+        cout << "Description: ";
+        cin.ignore();
+        getline(cin, p[i].description);
+        cout << "Available (1 for Yes, 0 for No): ";
+        cin >> p[i].available;
+    }
+
+    quickSort(p, 0, 2);
+
+    cout << "\nProducts sorted by price:\n";
+    for (int i = 0; i < 3; i++) {
+        cout << "Name: " << p[i].name << ", Price: " << p[i].price
+             << ", Description: " << p[i].description
+             << ", Available: " << (p[i].available ? "Yes" : "No") << endl;
+    }
+    return 0;
+}
