@@ -1,0 +1,58 @@
+#include <iostream>
+using namespace std;
+
+class Employee {
+public:
+    string name;
+    int id;
+    float salary;
+};
+
+void merge(Employee arr[], int l, int m, int r) {
+    int n1 = m - l + 1;
+    int n2 = r - m;
+    Employee L[12], R[12];
+    for (int i = 0; i < n1; i++)
+        L[i] = arr[l + i];
+    for (int j = 0; j < n2; j++)
+        R[j] = arr[m + 1 + j];
+    int i = 0, j = 0, k = l;
+    while (i < n1 && j < n2) {
+        if (L[i].salary >= R[j].salary)
+            arr[k++] = L[i++];
+        else
+            arr[k++] = R[j++];
+    }
+    while (i < n1)
+        arr[k++] = L[i++];
+    while (j < n2)
+        arr[k++] = R[j++];
+}
+
+void mergeSort(Employee arr[], int l, int r) {
+    if (l < r) {
+        int mid = (l + r) / 2;
+        mergeSort(arr, l, mid);
+        mergeSort(arr, mid + 1, r);
+        merge(arr, l, mid, r);
+    }
+}
+
+int main() {
+    Employee e[12];
+    for (int i = 0; i < 12; i++) {
+        cout << "Enter name of employee " << i + 1 << ": ";
+        cin >> e[i].name;
+        cout << "Enter ID: ";
+        cin >> e[i].id;
+        cout << "Enter salary: ";
+        cin >> e[i].salary;
+    }
+    mergeSort(e, 0, 11);
+    cout << "\nTop 3 Highest Paid Employees:\n";
+    for (int i = 0; i < 3; i++) {
+        cout << "Name: " << e[i].name << ", ID: " << e[i].id
+             << ", Salary: " << e[i].salary << endl;
+    }
+    return 0;
+}
