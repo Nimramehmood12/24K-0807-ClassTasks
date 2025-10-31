@@ -1,0 +1,75 @@
+#include<iostream>
+#include<string>
+using namespace std;
+
+class Node{
+public:
+    string name;
+    Node *l;
+    Node *r;
+
+    Node(string n){
+        name=n;
+        l=r=NULL;
+    }
+};
+
+Node* create(string name){
+    return new Node(name);
+}
+
+void insert(Node* root,string p,string n,bool isleft){
+    if(!root) return;
+
+    if(root->name==p){
+        if(isleft){
+            if(!root->l)
+            root->l=create(n);
+            else
+            cout<<"Left child already exists"<<endl;
+        }else{
+            if(!root->r)
+            root->r=create(n);
+            else
+            cout<<"Right child already exists"<<endl;
+        }
+        return;
+    }
+    insert(root->l,p,n,isleft);
+    insert(root->r,p,n,isleft);
+
+}
+
+void display(Node* root,int l=0){
+    if(!root) return;
+    for(int i=0;i<l;i++){
+        cout<<" ";
+        cout<<"-"<<root->name<<endl;
+    }
+    display(root->l, l + 1);
+    display(root->r, l + 1);
+}
+
+int main() {
+    Node* root = create("Pakistan Tours");
+    root->l = create("Northern Areas");
+    root->r = create("Southern Areas");
+
+    root->l->l = create("Hunza Valley");
+    root->l->r = create("Skardu Adventure");
+
+    root->r->l = create("Karachi City Tour");
+    root->r->r = create("Gwadar Beach Trip");
+
+    cout << "Tour Packages Structure:\n";
+    display(root);
+
+    cout<<"Inserting new pacakges: ";
+    insert(root, "Northern Areas", "Fairy Meadows", true);
+    insert(root, "Southern Areas", "Hyderabad Heritage Tour", false);
+
+    cout << "\nUpdated Tour Packages Structure:\n";
+    display(root);
+
+    return 0;
+}
