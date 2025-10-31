@@ -1,0 +1,71 @@
+#include <iostream>
+using namespace std;
+
+class Node {
+public:
+    int data;
+    Node* l;
+    Node* r;
+
+    Node(int val) {
+        data = val;
+        l = r = NULL;
+    }
+};
+
+Node* create(int val) {
+    return new Node(val);
+}
+
+void display(Node* root, int level = 0) {
+    if (!root) return;
+    for (int i = 0; i < level; i++)
+        cout << "   ";
+    cout << "- " << root->data << endl;
+    display(root->l, level + 1);
+    display(root->r, level + 1);
+}
+
+int findSum(Node* root, int target, bool &found, Node* &subRoot) {
+    if (!root) return 0;
+
+    int leftSum = findSum(root->l, target, found, subRoot);
+    int rightSum = findSum(root->r, target, found, subRoot);
+
+    int total = root->data + leftSum + rightSum;
+
+    if (total == target && !found) {
+        found = true;
+        subRoot = root;
+    }
+
+    return total;
+}
+
+int main() {
+    Node* root = create(5);
+    root->l = create(3);
+    root->r = create(8);
+    root->l->l = create(2);
+    root->l->r = create(4);
+    root->r->l = create(6);
+    root->r->r = create(10);
+
+    int target;
+    cout << "Enter target subtree sum: ";
+    cin >> target;
+
+    bool found = false;
+    Node* subRoot = NULL;
+
+    findSum(root, target, found, subRoot);
+
+    if (found) {
+        cout << "\nSubtree found with sum " << target << ":\n";
+        display(subRoot);
+    } else {
+        cout << "\nNo subtree with sum " << target << " found.\n";
+    }
+
+    return 0;
+}
