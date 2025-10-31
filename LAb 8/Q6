@@ -1,0 +1,58 @@
+#include <iostream>
+using namespace std;
+
+class Node {
+public:
+    int empID;
+    Node* l;
+    Node* r;
+
+    Node(int id) {
+        empID = id;
+        l = r = NULL;
+    }
+};
+
+Node* insert(Node* root, int id) {
+    if (!root)
+        return new Node(id);
+    if (id < root->empID)
+        root->l = insert(root->l, id);
+    else if (id > root->empID)
+        root->r = insert(root->r, id);
+    return root;
+}
+
+Node* findLCA(Node* root, int id1, int id2) {
+    if (!root) return NULL;
+
+    if (root->empID > id1 && root->empID > id2)
+        return findLCA(root->l, id1, id2);
+    if (root->empID < id1 && root->empID < id2)
+        return findLCA(root->r, id1, id2);
+
+    return root; 
+}
+
+int main() {
+    Node* root = NULL;
+
+    root = insert(root, 20);
+    root = insert(root, 10);
+    root = insert(root, 30);
+    root = insert(root, 5);
+    root = insert(root, 15);
+    root = insert(root, 25);
+    root = insert(root, 35);
+
+    int emp1 = 5, emp2 = 15;
+
+    Node* lca = findLCA(root, emp1, emp2);
+    if (lca)
+        cout << "Lowest Common Manager for employees " << emp1
+             << " and " << emp2 << " is Employee ID " << lca->empID << endl;
+    else
+        cout << "No common manager found.\n";
+
+    return 0;
+}
