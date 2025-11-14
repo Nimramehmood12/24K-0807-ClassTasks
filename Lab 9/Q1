@@ -85,6 +85,10 @@ void preOrder(Node* root) {
     }
 }
 
+void printHeight(Node* root) {
+    cout << "Height of the tree: " << height(root) << endl;
+}
+
 int main() {
     Node* root = NULL;
 
@@ -100,10 +104,11 @@ int main() {
 
     root = insert(root, 15);
 
-
     cout << "Preorder traversal of the constructed AVL tree is: ";
     preOrder(root);
     cout << endl;
+
+    printHeight(root);
 
     return 0;
 }
