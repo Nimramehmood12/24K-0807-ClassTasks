@@ -1,0 +1,73 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+class EmployeeHashTable {
+private:
+    string t[50];
+
+    int asciiSum(string x) {
+        int s = 0;
+        for (char c : x) s += int(c);
+        return s;
+    }
+
+public:
+    EmployeeHashTable() {
+        for (int i = 0; i < 50; i++)
+            t[i] = "";
+    }
+
+    void Add_Employee(string x) {
+        int s = asciiSum(x);
+        int h1 = s % 50;
+        int h2 = 7 - (s % 7);
+
+        for (int i = 0; i < 50; i++) {
+            int idx = (h1 + i * h2) % 50;
+            if (t[idx] == "") {
+                t[idx] = x;
+                cout << "Inserted at index " << idx << endl;
+                return;
+            }
+        }
+        cout << "Hash table full\n";
+    }
+
+    void Search_Employee(string x) {
+        int s = asciiSum(x);
+        int h1 = s % 50;
+        int h2 = 7 - (s % 7);
+
+        for (int i = 0; i < 50; i++) {
+            int idx = (h1 + i * h2) % 50;
+            if (t[idx] == x) {
+                cout << "Employee found at index " << idx << endl;
+                return;
+            }
+        }
+        cout << "Employee not found in the directory.\n";
+    }
+
+    void Display_Table() {
+        for (int i = 0; i < 50; i++) {
+            cout << i << ": " << t[i] << endl;
+        }
+    }
+};
+
+int main() {
+    EmployeeHashTable h;
+
+    h.Add_Employee("Zainab");
+    h.Add_Employee("Ali");
+    h.Add_Employee("Sara");
+
+    h.Search_Employee("Ali");
+    h.Search_Employee("Ahmed");
+
+    cout << "\nEmployee Table:\n";
+    h.Display_Table();
+
+    return 0;
+}
