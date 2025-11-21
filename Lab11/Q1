@@ -1,0 +1,75 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+struct N {
+    string a;
+    N* b;
+    N(string x) {
+        a = x;
+        b = NULL;
+    }
+};
+
+class H {
+private:
+    int a;
+    N** b;
+
+public:
+    H(int x) {
+        a = x;
+        b = new N*[a];
+        for (int i = 0; i < a; i++) b[i] = NULL;
+    }
+
+    int c(string x) {
+        int y = 0;
+        for (char z : x) y += int(z);
+        return y % a;
+    }
+
+    void d(string x) {
+        int y = c(x);
+        N* z = new N(x);
+        z->b = b[y];
+        b[y] = z;
+        cout << "Inserted " << x << " at " << y << endl;
+    }
+
+    void search(string x) {
+        int y = c(x);
+        N* z = b[y];
+        while (z != NULL) {
+            if (z->a == x) {
+                cout << x << " found at " << y << endl;
+                return;
+            }
+            z = z->b;
+        }
+        cout << x << " not found" << endl;
+    }
+
+    void f() {
+        for (int i = 0; i < a; i++) {
+            cout << i << ": ";
+            N* z = b[i];
+            while (z != NULL) {
+                cout << z->a << " -> ";
+                z = z->b;
+            }
+            cout << "NULL\n";
+        }
+    }
+};
+
+int main() {
+    H x(10);
+    x.d("apple");
+    x.d("banana");
+    x.d("grape");
+    x.d("apple");
+    x.search("banana");
+    x.search("dog");
+    x.f();
+}
