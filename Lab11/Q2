@@ -1,0 +1,93 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+struct N {
+    string a;
+    N* b;
+    N(string x) {
+        a = x;
+        b = NULL;
+    }
+};
+
+class D {
+private:
+    N* t[100];
+
+public:
+    D() {
+        for (int i = 0; i < 100; i++)
+            t[i] = NULL;
+    }
+
+    int h(string x) {
+        int s = 0;
+        for (char c : x) s += int(c);
+        return s % 100;
+    }
+
+    void Add_Record(string x) {
+        int i = h(x);
+        N* n = new N(x);
+        n->b = t[i];
+        t[i] = n;
+        cout << "Inserted at index " << i << endl;
+    }
+
+    void Word_Search(string x) {
+        int i = h(x);
+        N* n = t[i];
+        while (n != NULL) {
+            if (n->a == x) {
+                cout << "Word found at index " << i << endl;
+                return;
+            }
+            n = n->b;
+        }
+        cout << "Error: Word not found" << endl;
+    }
+
+    void Print_Dictionary() {
+        for (int i = 0; i < 100; i++) {
+            cout << i << ": ";
+            N* n = t[i];
+            while (n != NULL) {
+                cout << n->a << " -> ";
+                n = n->b;
+            }
+            cout << "NULL\n";
+        }
+    }
+};
+
+int main() {
+    D d;
+    int ch;
+    string w;
+
+    while (true) {
+        cout << "\n1. Add Record\n2. Search Word\n3. Print Dictionary\n4. Exit\n";
+        cin >> ch;
+
+        if (ch == 1) {
+            cout << "Enter word: ";
+            cin >> w;
+            d.Add_Record(w);
+        }
+        else if (ch == 2) {
+            cout << "Enter word: ";
+            cin >> w;
+            d.Word_Search(w);
+        }
+        else if (ch == 3) {
+            d.Print_Dictionary();
+        }
+        else if (ch == 4) {
+            break;
+        }
+        else {
+            cout << "Invalid choice\n";
+        }
+    }
+}
